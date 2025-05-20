@@ -1,46 +1,45 @@
-<?php 
+<?php
+//  Предполагаемый код для файла contact.php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = isset($_POST['name']) ? $_POST['name'] : '';
+    $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
+    $email = isset($_POST['email']) ? $_POST['email'] : '';
+    $message = isset($_POST['message']) ? $_POST['message'] : '';
 
-if (isset($_POST['name'])) {
-    $name = stripslashes(htmlspecialchars($_POST['name']));
+    $name = stripslashes($name);
+    $name = htmlspecialchars($name);
+
+    $phone = stripslashes($phone);
+    $phone = htmlspecialchars($phone);
+
+    $email = stripslashes($email);
+    $email = htmlspecialchars($email);
+
+    $message = stripslashes($message);
+    $message = htmlspecialchars($message);
+
+    $address = "wlad2806@mail.com"; // ВАШ АДРЕС
+    $subject = "Сообщение с сайта"; // Тема письма
+
+    $full_message = "Имя: " . $name . "\n";
+    $full_message .= "Email: " . $email . "\n";
+    $full_message .= "Телефон: " . $phone . "\n";
+    $full_message .= "Сообщение: " . $message . "\n";
+
+    //  Дополнительные заголовки для корректной отправки
+    $headers = "From: " . $email . "\r\n";
+    $headers .= "Reply-To: " . $email . "\r\n";
+    $headers .= "Content-type: text/plain; charset=UTF-8\r\n";
+
+    $verify = mail($address, $subject, $full_message, $headers);
+
+    if ($verify) {
+        echo "ok"; //  Возвращаем 'ok' для успешной обработки в AJAX
+    } else {
+        echo "error"; // Возвращаем 'error' для обработки ошибки в AJAX
+    }
 } else {
-    $name = '';
+    //  Если обращение к файлу не через POST запрос
+    echo "error";
 }
-
-if (isset($_POST['phone'])) {
-    $phone = stripslashes(htmlspecialchars($_POST['phone']));
-} else {
-    $phone = '';
-}
-
-if (isset($_POST['email'])) {
-    $email = stripslashes(htmlspecialchars($_POST['email']));
-} else {
-    $email = '';
-}
-
-if (isset($_POST['message'])) {
-    $message = stripslashes(htmlspecialchars($_POST['message']));
-} else {
-    $message = '';
-}
-
-// Ваш адрес
-$address = "wlad2806@mail.com"; 
-
-// Тема письма
-$subject = "Новое сообщение с сайта"; 
-
-// Формат сообщения
-$body = "Имя: ".$name."\nМой контактный e-mail: ".$email."\nТелефон: ".$phone."\nСообщение: ".$message;
-
-// Отправка почты
-$verify = mail($address, $subject, $body, "Content-type:text/plain; Charset=utf-8\r\n");
-
-// Проверка успешности отправки
-if ($verify) {
-    echo "Сообщение успешно отправлено!";
-} else {
-    echo "Ошибка при отправке сообщения.";
-}
-
 ?>
